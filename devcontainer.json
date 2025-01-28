@@ -1,0 +1,9 @@
+{
+  "name": "Dev",
+  "dockerComposeFile": "./dev/docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8080, 8500],
+  "remoteUser": "root",
+  "shutdownAction": "stopCompose"
+}
