@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  # 主开发容器（应用环境）
+  app:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ../../:/workspace:cached  # 挂载项目代码
+      - ../maven/settings.xml:/root/.m2/settings.xml  # 挂载 Maven 配置
+      - maven_repo:/root/.m2/repository  # 挂载 Maven 仓库
+      - bun_repo:/root/.bun/install/cache  # 挂载 Bun 配置
+    networks:
+      - dev-network
+    environment:
+      - DB_HOST=mysql
+      - REDIS_HOST=redis
+      - CONSUL_HOST=consul
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      consul:
+        condition: service_started
+
+  # MySQL 服务
+  mysql:
+    image: mysql:lts
+    networks:
+      - dev-network
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../mysql/initdb.d:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  # Redis 服务
+  redis:
+    image: redis:alpine
+    networks:
+      - dev-network
+    volumes:
+      - redis_data:/data
+
+  # Consul 服务
+  consul:
+    image: consul:1.15
+    networks:
+      - dev-network
+    volumes:
+      - consul_data:/consul/data
+    ports:
+      - "8500:8500"
+    command: "agent -dev -client=0.0.0.0"
+
+# 网络和卷
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  maven_repo:
+  bun_repo:
+  mysql_data:
+  redis_data:
+  consul_data:

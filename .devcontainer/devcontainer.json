@@ -1,6 +1,6 @@
 {
-  "name": "Dev Container",
-  "dockerComposeFile": "docker-compose.yml",
+  "name": "Dev",
+  "dockerComposeFile": "./dev/docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
   "forwardPorts": [8080, 8500],
