@@ -1,2 +1,2 @@
 # dev-container
-java21/nodejs22/mysql/redis/consul/maven
+java21/bun/mysql/redis/consul/maven
