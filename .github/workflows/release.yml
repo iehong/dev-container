@@ -14,11 +14,11 @@ jobs:
         with:
           fetch-depth: 0 # 拉取所有历史记录，以便正确生成 changelog
 
-      - name: Remove README.md
-        run: rm README.md
-
-      - name: Delete .github directory
-        run: rm -rf .github
+      # 排除 .github 目录和 README 文件
+      - name: Exclude .github and README
+        run: |
+          rm -rf .github
+          rm -f README.md
 
       - name: Create Release
         id: create_release
@@ -30,3 +30,22 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+
+      - name: Upload Directory
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 设置目录路径
+          DIR_PATH="./" # 需要上传的目录路径
+          UPLOAD_URL="${{ steps.create_release.outputs.upload_url }}"
+
+          # 遍历目录中的文件并逐个上传
+          for FILE in "$DIR_PATH"/*; do
+            echo "Uploading $FILE..."
+            curl -s \
+              -X POST \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Content-Type: $(file -b --mime-type "$FILE")" \
+              --data-binary @"$FILE" \
+              "$UPLOAD_URL?name=$(basename "$FILE")"
+          done
