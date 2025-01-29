@@ -1,0 +1,12 @@
+{
+  "name": "@iehong/dev-container",
+  "version": "1.0.0",
+  "bin": {
+    "dev-container-init": "./bin/setup.js"
+  },
+  "files": [
+    ".devcontainer",
+    "bin"
+  ],
+  "license": "MIT"
+}
