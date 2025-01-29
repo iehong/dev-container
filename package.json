@@ -1,6 +1,22 @@
 {
   "name": "@iehong/dev-container",
   "version": "1.0.0",
+  "description": "A development container setup tool for initializing project environments.",
+  "keywords": [
+    "dev-container",
+    "setup",
+    "development",
+    "environment"
+  ],
+  "author": "iehong <iehong@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iehong/dev-container.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iehong/dev-container/issues"
+  },
+  "homepage": "https://github.com/iehong/dev-container",
   "bin": {
     "dev-container-init": "./bin/setup.js"
   },

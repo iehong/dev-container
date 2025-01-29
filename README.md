@@ -7,3 +7,9 @@ java21/bun/mysql/redis/consul/maven
 ```
 npx github:iehong/dev-container
 ```
+
+或者
+
+```
+npx @iehong/dev-container
+```
